@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Listing - Fashion Swap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-primary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .nav-control {
+            width: 40px;
+            height: 40px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-control:hover {
+            background: #e2e8f0;
+        }
+
+        .nav-secondary {
+            padding: 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            color: #94a3b8;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px 0;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .form-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        /* Image Upload Section */
+        .image-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-image-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+            overflow: hidden;
+        }
+
+        .main-image-container:hover {
+            border-color: #3b82f6;
+            background: #f0f9ff;
+        }
+
+        .main-image-container.has-image {
+            border-style: solid;
+            border-color: #e2e8f0;
+        }
+
+        .upload-placeholder {
+            text-align: center;
+            color: #64748b;
+        }
+
+        .upload-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 16px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-image-preview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            color: white;
+            font-weight: 500;
+        }
+
+        .main-image-container:hover .image-overlay {
+            opacity: 1;
+        }
+
+        /* Product Info Section */
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 8px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .radio-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #3b82f6;
+        }
+
+        /* Additional Images Section */
+        .additional-images {
+            margin-top: 40px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 16px;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .image-slot {
+            position: relative;
+            aspect-ratio: 1;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+            overflow: hidden;
+        }
+
+        .image-slot:hover {
+            border-color: #3b82f6;
+            background: #f0f9ff;
+        }
+
+        .image-slot.has-image {
+            border-style: solid;
+            border-color: #e2e8f0;
+        }
+
+        .image-slot-preview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-slot-placeholder {
+            font-size: 24px;
+            color: #cbd5e1;
+        }
+
+        /* Submit Button */
+        .submit-section {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .submit-button {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 16px 48px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(59, 130, 246, 0.4);
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        /* Hidden file inputs */
+        .file-input {
+            display: none;
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .alert.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .alert-success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .alert-error {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .form-layout {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .image-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .main-image-container {
+                height: 300px;
+            }
+
+            .nav-primary {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .nav-secondary {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .radio-group {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .submit-button {
+                width: 100%;
+                padding: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-container {
+                padding: 20px;
+            }
+
+            .image-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div class="nav-primary">
+                <h1 class="page-title">Item Listing</h1>
+                <div class="nav-control">
+                    <span>⚙️</span>
+                </div>
+            </div>
+            <div class="nav-secondary">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Search items...">
+                    <span class="search-icon">🔍</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <div id="alert-container"></div>
+            
+            <form id="listing-form" class="form-container">
+                <div class="form-layout">
+                    <!-- Image Upload Section -->
+                    <div class="image-section">
+                        <div class="main-image-container" id="main-image-container">
+                            <div class="upload-placeholder">
+                                <div class="upload-icon">📷</div>
+                                <p><strong>Click to upload main image</strong></p>
+                                <p>JPG, PNG up to 2MB</p>
+                            </div>
+                            <div class="image-overlay">Click to change image</div>
+                        </div>
+                        <input type="file" id="main-image-input" class="file-input" accept="image/jpeg,image/png" required>
+                    </div>
+
+                    <!-- Product Info Section -->
+                    <div class="product-info">
+                        <div class="form-group">
+                            <label class="form-label" for="product-name">Product Name *</label>
+                            <input type="text" id="product-name" class="form-input" placeholder="Enter product name" required maxlength="100">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="description">Description *</label>
+                            <textarea id="description" class="form-textarea" placeholder="Describe your item in detail..." required maxlength="500"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="category">Category *</label>
+                            <select id="category" class="form-select" required>
+                                <option value="">Select a category</option>
+                                <option value="tops">Tops</option>
+                                <option value="bottoms">Bottoms</option>
+                                <option value="dresses">Dresses</option>
+                                <option value="outerwear">Outerwear</option>
+                                <option value="shoes">Shoes</option>
+                                <option value="accessories">Accessories</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="size">Size *</label>
+                            <select id="size" class="form-select" required>
+                                <option value="">Select size</option>
+                                <option value="xs">XS</option>
+                                <option value="s">S</option>
+                                <option value="m">M</option>
+                                <option value="l">L</option>
+                                <option value="xl">XL</option>
+                                <option value="xxl">XXL</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="condition">Condition *</label>
+                            <select id="condition" class="form-select" required>
+                                <option value="">Select condition</option>
+                                <option value="new">New with tags</option>
+                                <option value="like-new">Like new</option>
+                                <option value="good">Good</option>
+                                <option value="fair">Fair</option>
+                                <option value="poor">Poor</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="tags">Tags</label>
+                            <input type="text" id="tags" class="form-input" placeholder="Enter tags separated by commas (e.g., vintage, designer, casual)">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Availability Status *</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="availability" value="available" required>
+                                    <span>Available</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="availability" value="not-available">
+                                    <span>Not Available</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Images Section -->
+                <div class="additional-images">
+                    <h3 class="section-title">Product Images</h3>
+                    <div class="image-grid">
+                        <div class="image-slot" data-slot="0">
+                            <span class="image-slot-placeholder">+</span>
+                        </div>
+                        <div class="image-slot" data-slot="1">
+                            <span class="image-slot-placeholder">+</span>
+                        </div>
+                        <div class="image-slot" data-slot="2">
+                            <span class="image-slot-placeholder">+</span>
+                        </div>
+                        <div class="image-slot" data-slot="3">
+                            <span class="image-slot-placeholder">+</span>
+                        </div>
+                    </div>
+                    <input type="file" id="additional-images-input" class="file-input" accept="image/jpeg,image/png" multiple>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="submit-section">
+                    <button type="submit" class="submit-button">Submit Listing</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        class ItemListingApp {
+            constructor() {
+                this.mainImageInput = document.getElementById('main-image-input');
+                this.mainImageContainer = document.getElementById('main-image-container');
+                this.additionalImagesInput = document.getElementById('additional-images-input');
+                this.imageSlots = document.querySelectorAll('.image-slot');
+                this.form = document.getElementById('listing-form');
+                this.alertContainer = document.getElementById('alert-container');
+                
+                this.additionalImages = [];
+                this.maxFileSize = 2 * 1024 * 1024; // 2MB
+                this.allowedTypes = ['image/jpeg', 'image/png'];
+                
+                this.initializeEventListeners();
+            }
+
+            initializeEventListeners() {
+                // Main image upload
+                this.mainImageContainer.addEventListener('click', () => {
+                    this.mainImageInput.click();
+                });
+
+                this.mainImageInput.addEventListener('change', (e) => {
+                    this.handleMainImageUpload(e);
+                });
+
+                // Additional images upload
+                this.imageSlots.forEach((slot, index) => {
+                    slot.addEventListener('click', () => {
+                        this.additionalImagesInput.click();
+                    });
+                });
+
+                this.additionalImagesInput.addEventListener('change', (e) => {
+                    this.handleAdditionalImagesUpload(e);
+                });
+
+                // Form submission
+                this.form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleFormSubmit();
+                });
+            }
+
+            validateFile(file) {
+                if (!this.allowedTypes.includes(file.type)) {
+                    this.showAlert('Please upload only JPG or PNG images.', 'error');
+                    return false;
+                }
+
+                if (file.size > this.maxFileSize) {
+                    this.showAlert('File size must be less than 2MB.', 'error');
+                    return false;
+                }
+
+                return true;
+            }
+
+            handleMainImageUpload(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                if (!this.validateFile(file)) {
+                    event.target.value = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.mainImageContainer.innerHTML = `
+                        <img src="${e.target.result}" alt="Main product image" class="main-image-preview">
+                        <div class="image-overlay">Click to change image</div>
+                    `;
+                    this.mainImageContainer.classList.add('has-image');
+                };
+                reader.readAsDataURL(file);
+            }
+
+            handleAdditionalImagesUpload(event) {
+                const files = Array.from(event.target.files);
+                const availableSlots = 4 - this.additionalImages.length;
+
+                if (files.length > availableSlots) {
+                    this.showAlert(`You can only upload ${availableSlots} more images.`, 'error');
+                    return;
+                }
+
+                files.forEach((file, index) => {
+                    if (!this.validateFile(file)) return;
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const slotIndex = this.additionalImages.length;
+                        if (slotIndex < 4) {
+                            const slot = this.imageSlots[slotIndex];
+                            slot.innerHTML = `<img src="${e.target.result}" alt="Additional product image" class="image-slot-preview">`;
+                            slot.classList.add('has-image');
+                            this.additionalImages.push(file);
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
+
+                event.target.value = '';
+            }
+
+            validateForm() {
+                const requiredFields = [
+                    { id: 'product-name', name: 'Product Name' },
+                    { id: 'description', name: 'Description' },
+                    { id: 'category', name: 'Category' },
+                    { id: 'size', name: 'Size' },
+                    { id: 'condition', name: 'Condition' }
+                ];
+
+                const errors = [];
+
+                // Check required fields
+                requiredFields.forEach(field => {
+                    const element = document.getElementById(field.id);
+                    if (!element.value.trim()) {
+                        errors.push(`${field.name} is required.`);
+                    }
+                });
+
+                // Check availability radio buttons
+                const availability = document.querySelector('input[name="availability"]:checked');
+                if (!availability) {
+                    errors.push('Please select availability status.');
+                }
+
+                // Check main image
+                if (!this.mainImageInput.files.length) {
+                    errors.push('Main product image is required.');
+                }
+
+                // Check character limits
+                const productName = document.getElementById('product-name').value;
+                const description = document.getElementById('description').value;
+
+                if (productName.length > 100) {
+                    errors.push('Product name must be less than 100 characters.');
+                }
+
+                if (description.length > 500) {
+                    errors.push('Description must be less than 500 characters.');
+                }
+
+                return errors;
+            }
+
+            handleFormSubmit() {
+                const errors = this.validateForm();
+
+                if (errors.length > 0) {
+                    this.showAlert(errors.join(' '), 'error');
+                    return;
+                }
+
+                // Collect form data
+                const formData = {
+                    productName: document.getElementById('product-name').value,
+                    description: document.getElementById('description').value,
+                    category: document.getElementById('category').value,
+                    size: document.getElementById('size').value,
+                    condition: document.getElementById('condition').value,
+                    tags: document.getElementById('tags').value.split(',').map(tag => tag.trim()).filter(tag => tag),
+                    availability: document.querySelector('input[name="availability"]:checked').value,
+                    mainImage: this.mainImageInput.files[0]?.name || 'main-image.jpg',
+                    additionalImages: this.additionalImages.map(img => img.name),
+                    timestamp: new Date().toISOString()
+                };
+
+                // Store in localStorage (simulating backend)
+                const existingListings = JSON.parse(localStorage.getItem('fashionSwapListings') || '[]');
+                existingListings.push(formData);
+                localStorage.setItem('fashionSwapListings', JSON.stringify(existingListings));
+
+                this.showAlert('Your item has been successfully submitted!', 'success');
+                this.resetForm();
+            }
+
+            resetForm() {
+                setTimeout(() => {
+                    this.form.reset();
+                    
+                    // Reset main image
+                    this.mainImageContainer.innerHTML = `
+                        <div class="upload-placeholder">
+                            <div class="upload-icon">📷</div>
+                            <p><strong>Click to upload main image</strong></p>
+                            <p>JPG, PNG up to 2MB</p>
+                        </div>
+                        <div class="image-overlay">Click to change image</div>
+                    `;
+                    this.mainImageContainer.classList.remove('has-image');
+
+                    // Reset additional images
+                    this.imageSlots.forEach(slot => {
+                        slot.innerHTML = '<span class="image-slot-placeholder">+</span>';
+                        slot.classList.remove('has-image');
+                    });
+
+                    this.additionalImages = [];
+                }, 2000);
+            }
+
+            showAlert(message, type) {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${type}`;
+                alertDiv.textContent = message;
+
+                this.alertContainer.appendChild(alertDiv);
+
+                setTimeout(() => {
+                    alertDiv.classList.add('show');
+                }, 100);
+
+                setTimeout(() => {
+                    alertDiv.classList.remove('show');
+                    setTimeout(() => {
+                        if (alertDiv.parentNode) {
+                            alertDiv.parentNode.removeChild(alertDiv);
+                        }
+                    }, 300);
+                }, 4000);
+            }
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new ItemListingApp();
+        });
+    </script>
+</body>
+</html>
