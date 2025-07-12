@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - ClothSwap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1>User Dashboard</h1>
+            
+            <div class="settings-icon"></div>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="profile-section">
+            <div class="profile-content">
+                <div class="profile-image" onclick="uploadProfileImage()">
+                    <span id="profileInitials">JD</span>
+                </div>
+                <div class="profile-form">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" value="john_doe_fashion" oninput="saveProfile()">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" value="john.doe@email.com" oninput="saveProfile()">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone" value="+1 (555) 123-4567" oninput="saveProfile()">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" id="address" value="123 Fashion Street" oninput="saveProfile()">
+                    </div>
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" value="New York" oninput="saveProfile()">
+                    </div>
+                    <div class="form-group">
+                        <label for="pincode">Pincode</label>
+                        <input type="text" id="pincode" value="10001" oninput="saveProfile()">
+                    </div>
+                </div>
+            </div>
+            <div class="user-status">
+                <p>Welcome to ClothSwap! Your marketplace for buying and selling pre-loved fashion items. Build your reputation by making successful transactions.</p>
+                <div class="user-badges">
+                    <div class="badge altruistic-ibex">Altruistic Ibex</div>
+                    <div class="badge fancy-fish">Fancy Fish</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Listings Section -->
+        <div class="section">
+            <h2>My Listings</h2>
+            <div class="product-grid" id="listingsGrid">
+                <!-- Listings will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- My Purchases Section -->
+        <div class="section">
+            <h2>My Purchases</h2>
+            <div class="product-grid" id="purchasesGrid">
+                <!-- Purchases will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for user listings and purchases
+        const userListings = [
+            {
+                id: 1,
+                name: "Vintage Denim Jacket",
+                price: "$45",
+                description: "Classic 90s style, excellent condition",
+                status: "active",
+                emoji: "🧥"
+            },
+            {
+                id: 2,
+                name: "Summer Floral Dress",
+                price: "$28",
+                description: "Perfect for beach days, size M",
+                status: "active",
+                emoji: "👗"
+            },
+            {
+                id: 3,
+                name: "Leather Boots",
+                price: "$60",
+                description: "Genuine leather, barely worn",
+                status: "sold",
+                emoji: "👢"
+            },
+            {
+                id: 4,
+                name: "Cashmere Sweater",
+                price: "$85",
+                description: "Luxurious feel, winter essential",
+                status: "active",
+                emoji: "🧶"
+            }
+        ];
+
+        const userPurchases = [
+            {
+                id: 1,
+                name: "Designer Handbag",
+                price: "$120",
+                description: "Authentic designer piece",
+                status: "delivered",
+                emoji: "👜"
+            },
+            {
+                id: 2,
+                name: "Silk Scarf",
+                price: "$35",
+                description: "Beautiful pattern, premium silk",
+                status: "delivered",
+                emoji: "🧣"
+            },
+            {
+                id: 3,
+                name: "Running Shoes",
+                price: "$75",
+                description: "Nike Air Max, size 9",
+                status: "delivered",
+                emoji: "👟"
+            }
+        ];
+
+        // Function to create product cards
+        function createProductCard(item) {
+            const statusClass = item.status === 'active' ? 'status-active' : 
+                               item.status === 'sold' ? 'status-sold' : 'status-delivered';
+            
+            return `
+                <div class="product-card" onclick="viewProduct(${item.id})">
+                    <div class="product-image">
+                        <span>${item.emoji}</span>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${item.name}</div>
+                        <div class="product-price">${item.price}</div>
+                        <div class="product-description">${item.description}</div>
+                        <div class="product-status ${statusClass}">
+                            ${item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to populate listings
+        function populateListings() {
+            const listingsGrid = document.getElementById('listingsGrid');
+            
+            if (userListings.length === 0) {
+                listingsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">👕</div>
+                        <p>No listings yet. Start selling your clothes!</p>
+                        <button class="add-item-btn" onclick="addNewListing()">Add New Listing</button>
+                    </div>
+                `;
+            } else {
+                listingsGrid.innerHTML = userListings.map(createProductCard).join('');
+            }
+        }
+
+        // Function to populate purchases
+        function populatePurchases() {
+            const purchasesGrid = document.getElementById('purchasesGrid');
+            
+            if (userPurchases.length === 0) {
+                purchasesGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">🛍️</div>
+                        <p>No purchases yet. Start shopping!</p>
+                        <button class="add-item-btn" onclick="browseCatalog()">Browse Catalog</button>
+                    </div>
+                `;
+            } else {
+                purchasesGrid.innerHTML = userPurchases.map(createProductCard).join('');
+            }
+        }
+
+        // Function to save profile data
+        function saveProfile() {
+            const profileData = {
+                username: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                pincode: document.getElementById('pincode').value
+            };
+            
+            // In a real app, this would send data to a server
+            console.log('Profile saved:', profileData);
+            
+            // Update profile initials
+            const username = profileData.username;
+            const initials = username.split('_').map(word => word.charAt(0).toUpperCase()).join('');
+            document.getElementById('profileInitials').textContent = initials.substring(0, 2);
+        }
+
+        // Utility functions for user interactions
+        function uploadProfileImage() {
+            alert('Profile image upload feature would be implemented here!');
+        }
+
+        function viewProduct(productId) {
+            alert(`Viewing product with ID: ${productId}`);
+        }
+
+        function addNewListing() {
+            alert('Add new listing feature would be implemented here!');
+        }
+
+        function browseCatalog() {
+            alert('Browse catalog feature would be implemented here!');
+        }
+
+        // Update user badges based on activity
+        function updateUserBadges() {
+            const listingCount = userListings.length;
+            const purchaseCount = userPurchases.length;
+            
+            // This would contain logic to determine which badges to show
+            // based on user activity, ratings, etc.
+        }
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            populateListings();
+            populatePurchases();
+            updateUserBadges();
+            
+            // Load saved profile data if available
+            const savedProfile = localStorage.getItem('userProfile');
+            if (savedProfile) {
+                const profileData = JSON.parse(savedProfile);
+                Object.keys(profileData).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.value = profileData[key];
+                    }
+                });
+            }
+        });
+
+        // Save profile data to localStorage on input changes
+        function saveProfile() {
+            const profileData = {
+                username: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                pincode: document.getElementById('pincode').value
+            };
+            
+            localStorage.setItem('userProfile', JSON.stringify(profileData));
+            
+            // Update profile initials
+            const username = profileData.username;
+            const initials = username.split('_').map(word => word.charAt(0).toUpperCase()).join('');
+            document.getElementById('profileInitials').textContent = initials.substring(0, 2);
+        }
+    </script>
+</body>
+</html>
