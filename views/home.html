@@ -385,7 +385,7 @@
             font-size: 1.1rem;
         }
         
-        /* Categories Section */
+        /* Categories Section - Horizontal Scroll */
         .categories-section {
             position: relative;
             overflow: hidden;
@@ -460,33 +460,49 @@
             gap: 0.5rem;
         }
         
-        /* Products Section */
+        /* Products Section - Vertical Grid */
         .products-section {
             background-color: var(--light);
         }
         
-        .products-scroll {
-            display: flex;
-            gap: 2rem;
-            overflow-x: auto;
-            padding: 2rem 0;
-            scroll-snap-type: x mandatory;
+        .products-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2.5rem;
         }
         
         .product-card {
-            min-width: 280px;
             background-color: white;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 5px 20px rgba(0,0,0,0.05);
             transition: all 0.3s ease;
-            scroll-snap-align: start;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
         
         .product-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .product-image-container {
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+        }
+        
+        .product-img {
+            height: 350px;
+            width: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .product-card:hover .product-img {
+            transform: scale(1.03);
         }
         
         .product-badge {
@@ -499,18 +515,48 @@
             border-radius: 50px;
             font-size: 0.8rem;
             font-weight: 600;
-            z-index: 1;
+            z-index: 2;
         }
         
-        .product-img {
-            height: 350px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
+        .product-actions {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2;
+        }
+        
+        .product-card:hover .product-actions {
+            opacity: 1;
+        }
+        
+        .add-to-cart-btn {
+            background-color: var(--secondary);
+            color: var(--dark);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .add-to-cart-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
         }
         
         .product-info {
             padding: 1.8rem;
+            display: flex;
+            flex-direction: column;
         }
         
         .product-title {
@@ -524,16 +570,20 @@
             font-size: 0.95rem;
             margin-bottom: 1rem;
             line-height: 1.6;
+            flex-grow: 1;
+        }
+        
+        .product-price-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
         }
         
         .product-price {
             font-weight: 700;
             color: var(--secondary);
             font-size: 1.3rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
         }
         
         .original-price {
@@ -541,21 +591,7 @@
             color: var(--text-light);
             font-size: 1rem;
             font-weight: 400;
-        }
-        
-        .product-meta {
-            display: flex;
-            justify-content: space-between;
-            color: var(--text-light);
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(0,0,0,0.1);
-        }
-        
-        .product-actions {
-            display: flex;
-            justify-content: space-between;
+            margin-left: 0.5rem;
         }
         
         .wishlist-btn {
@@ -565,11 +601,22 @@
             cursor: pointer;
             transition: all 0.3s;
             font-size: 1.2rem;
+            padding: 0.5rem;
         }
         
         .wishlist-btn:hover {
             color: var(--secondary);
             transform: scale(1.1);
+        }
+        
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0,0,0,0.1);
         }
         
         /* How It Works Section */
@@ -643,7 +690,7 @@
             font-size: 1rem;
         }
         
-        /* Testimonials Section */
+        /* Testimonials */
         .testimonials {
             position: relative;
             overflow: hidden;
@@ -953,6 +1000,10 @@
             .section-title h2 {
                 font-size: 2.5rem;
             }
+            
+            .products-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
         }
         
         @media (max-width: 768px) {
@@ -1004,6 +1055,11 @@
                 grid-template-columns: 1fr;
                 gap: 3rem;
             }
+            
+            .products-container {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 2rem;
+            }
         }
         
         @media (max-width: 576px) {
@@ -1023,8 +1079,9 @@
                 font-size: 2rem;
             }
             
-            .category-card, .product-card {
-                min-width: 260px;
+            .products-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
             }
         }
     </style>
@@ -1162,101 +1219,150 @@
             <p class="section-subtitle">Freshly listed items from our community of luxury sellers</p>
         </div>
         
-        <div class="products-scroll">
+        <div class="products-container">
             <div class="product-card">
-                <span class="product-badge">Just In</span>
-                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1936&q=80');"></div>
+                <div class="product-image-container">
+                    <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1936&q=80" alt="Rolex Datejust 36mm" class="product-img">
+                    <span class="product-badge">Just In</span>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div>
                 <div class="product-info">
                     <h3 class="product-title">Rolex Datejust 36mm</h3>
                     <p class="product-description">2018 model with box and papers. Flawless condition with minimal signs of wear.</p>
-                    <div class="product-price">
-                        $8,950 <span class="original-price">$12,500</span>
+                    <div class="product-price-container">
+                        <div>
+                            <span class="product-price">$8,950</span>
+                            <span class="original-price">$12,500</span>
+                        </div>
+                        <button class="wishlist-btn"><i class="far fa-heart"></i></button>
                     </div>
                     <div class="product-meta">
                         <span>Condition: Excellent</span>
                         <span>Authenticity Guaranteed</span>
                     </div>
-                    <div class="product-actions">
-                        <button class="wishlist-btn"><i class="far fa-heart"></i></button>
-                        <button class="btn btn-primary">Add to Cart</button>
-                    </div>
                 </div>
             </div>
             
             <div class="product-card">
-                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1926&q=80');"></div>
+                <div class="product-image-container">
+                    <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1926&q=80" alt="Chanel Classic Flap Bag" class="product-img">
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div>
                 <div class="product-info">
                     <h3 class="product-title">Chanel Classic Flap Bag</h3>
                     <p class="product-description">Medium size in black caviar leather with gold hardware. Includes authenticity card.</p>
-                    <div class="product-price">
-                        $5,200 <span class="original-price">$7,800</span>
+                    <div class="product-price-container">
+                        <div>
+                            <span class="product-price">$5,200</span>
+                            <span class="original-price">$7,800</span>
+                        </div>
+                        <button class="wishlist-btn"><i class="far fa-heart"></i></button>
                     </div>
                     <div class="product-meta">
                         <span>Condition: Like New</span>
                         <span>Includes Dust Bag</span>
                     </div>
-                    <div class="product-actions">
-                        <button class="wishlist-btn"><i class="far fa-heart"></i></button>
-                        <button class="btn btn-primary">Add to Cart</button>
-                    </div>
                 </div>
             </div>
             
             <div class="product-card">
-                <span class="product-badge">Limited</span>
-                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1539533018447-63fcce2678e4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80');"></div>
+                <div class="product-image-container">
+                    <img src="https://images.unsplash.com/photo-1539533018447-63fcce2678e4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80" alt="Tom Ford Tuxedo" class="product-img">
+                    <span class="product-badge">Limited</span>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div>
                 <div class="product-info">
                     <h3 class="product-title">Tom Ford Tuxedo</h3>
                     <p class="product-description">Peak lapel tuxedo in virgin wool. Worn once for a wedding. Includes matching trousers.</p>
-                    <div class="product-price">
-                        $1,250 <span class="original-price">$3,200</span>
+                    <div class="product-price-container">
+                        <div>
+                            <span class="product-price">$1,250</span>
+                            <span class="original-price">$3,200</span>
+                        </div>
+                        <button class="wishlist-btn"><i class="far fa-heart"></i></button>
                     </div>
                     <div class="product-meta">
                         <span>Size: 40R</span>
                         <span>Dry Cleaned</span>
                     </div>
-                    <div class="product-actions">
-                        <button class="wishlist-btn"><i class="far fa-heart"></i></button>
-                        <button class="btn btn-primary">Add to Cart</button>
-                    </div>
                 </div>
             </div>
             
             <div class="product-card">
-                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1973&q=80');"></div>
+                <div class="product-image-container">
+                    <img src="https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1973&q=80" alt="Dior Saddle Bag" class="product-img">
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div>
                 <div class="product-info">
                     <h3 class="product-title">Dior Saddle Bag</h3>
                     <p class="product-description">Iconic saddle bag in navy blue oblique jacquard. Includes original strap and dust bag.</p>
-                    <div class="product-price">
-                        $2,800
+                    <div class="product-price-container">
+                        <div>
+                            <span class="product-price">$2,800</span>
+                        </div>
+                        <button class="wishlist-btn"><i class="far fa-heart"></i></button>
                     </div>
                     <div class="product-meta">
                         <span>Condition: Excellent</span>
                         <span>2019 Collection</span>
                     </div>
-                    <div class="product-actions">
-                        <button class="wishlist-btn"><i class="far fa-heart"></i></button>
-                        <button class="btn btn-primary">Add to Cart</button>
-                    </div>
                 </div>
             </div>
             
             <div class="product-card">
-                <span class="product-badge">Rare</span>
-                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1926&q=80');"></div>
+                <div class="product-image-container">
+                    <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1926&q=80" alt="Air Jordan 1 Retro High" class="product-img">
+                    <span class="product-badge">Rare</span>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div>
                 <div class="product-info">
                     <h3 class="product-title">Air Jordan 1 Retro High</h3>
                     <p class="product-description">OG Chicago colorway from 2015 release. Deadstock condition with original box.</p>
-                    <div class="product-price">
-                        $1,950 <span class="original-price">$2,500</span>
+                    <div class="product-price-container">
+                        <div>
+                            <span class="product-price">$1,950</span>
+                            <span class="original-price">$2,500</span>
+                        </div>
+                        <button class="wishlist-btn"><i class="far fa-heart"></i></button>
                     </div>
                     <div class="product-meta">
                         <span>Size: US 10</span>
                         <span>Never Worn</span>
                     </div>
+                </div>
+            </div>
+            
+            <div class="product-card">
+                <div class="product-image-container">
+                    <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80" alt="Louis Vuitton Neverfull" class="product-img">
+                    <span class="product-badge">Popular</span>
                     <div class="product-actions">
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Louis Vuitton Neverfull</h3>
+                    <p class="product-description">MM size in classic monogram canvas with beige interior. Includes original pouch.</p>
+                    <div class="product-price-container">
+                        <div>
+                            <span class="product-price">$1,150</span>
+                            <span class="original-price">$1,600</span>
+                        </div>
                         <button class="wishlist-btn"><i class="far fa-heart"></i></button>
-                        <button class="btn btn-primary">Add to Cart</button>
+                    </div>
+                    <div class="product-meta">
+                        <span>Condition: Very Good</span>
+                        <span>2017 Collection</span>
                     </div>
                 </div>
             </div>
