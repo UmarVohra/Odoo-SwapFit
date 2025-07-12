@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+            overflow-x:hidden;
+            
+        }
+
+        /* Top Navigation Bar */
+        .top-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .top-nav h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .search-input {
+            padding: 0.7rem 1.2rem;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 25px;
+            outline: none;
+            width: 280px;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .control-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .control-icon:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .control-icon::before {
+            content: "⚙";
+            font-size: 1.3rem;
+            color: white;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 1.5rem;
+            padding: 2rem;
+            justify-content: center;
+        }
+
+        .nav-tab {
+            padding: 1.2rem 2.5rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #2c3e50;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .nav-tab:hover::before,
+        .nav-tab.active::before {
+            left: 0;
+        }
+
+        .nav-tab:hover,
+        .nav-tab.active {
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Main Section */
+        .main-section {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            color: white;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Add New Button */
+        .add-btn {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .add-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+        }
+
+        .add-btn::before {
+            content: "+ ";
+            font-size: 1.2rem;
+        }
+
+        /* Content Cards */
+        .content-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .content-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        /* User Cards - List Layout */
+        .user-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .user-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar::before {
+            content: attr(data-initial);
+            position: absolute;
+        }
+
+        .user-details {
+            flex: 1;
+            background: rgba(248, 249, 250, 0.7);
+            padding: 1.2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(233, 236, 239, 0.5);
+            min-height: 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .user-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-email {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .user-role {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .user-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #28a745;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            border: 2px solid white;
+        }
+
+        .user-status.offline {
+            background: #dc3545;
+        }
+
+        /* Order Cards */
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .order-id {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .order-date {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .order-amount {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #28a745;
+        }
+
+        .order-status {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .order-status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .order-status.completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .order-status.cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .order-items {
+            margin: 1rem 0;
+            color: #6c757d;
+        }
+
+        /* Listing Cards */
+        .listing-image {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            opacity: 0.8;
+        }
+
+        .listing-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .listing-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #28a745;
+            margin-bottom: 0.5rem;
+        }
+
+        .listing-category {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .listing-stats {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+
+        /* Action Buttons */
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .action-btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            color: white;
+        }
+
+        .action-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .action-btn.secondary {
+            background: linear-gradient(45deg, #6c757d, #5a6268);
+            color: white;
+        }
+
+        .action-btn.secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+        }
+
+        .action-btn.danger {
+            background: linear-gradient(45deg, #dc3545, #c82333);
+            color: white;
+        }
+
+        .action-btn.danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .action-btn.success {
+            background: linear-gradient(45deg, #28a745, #1e7e34);
+            color: white;
+        }
+
+        .action-btn.success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        /* Hidden sections */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .top-nav {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .search-input {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .nav-tab {
+                text-align: center;
+                width: 100%;
+            }
+
+            .content-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .user-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .user-details {
+                width: 100%;
+                text-align: center;
+            }
+
+            .actions {
+                flex-direction: row;
+                justify-content: center;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-section {
+                padding: 1rem;
+            }
+
+            .content-card {
+                padding: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Animation for smooth transitions */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section.active {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="top-nav">
+        <input type="text" class="search-input" placeholder="Search users, orders, listings..." id="searchInput">
+        <h1>Admin Panel</h1>
+        <div class="control-icon" onclick="toggleSettings()"></div>
+    </nav>
+
+    <!-- Navigation Tabs -->
+    <section class="nav-tabs">
+        <button class="nav-tab active" onclick="showSection('users')">Manage Users</button>
+        <button class="nav-tab" onclick="showSection('orders')">Manage Orders</button>
+        <button class="nav-tab" onclick="showSection('listings')">Manage Listings</button>
+    </section>
+
+    <!-- Main Section -->
+    <main class="main-section">
+        <!-- /* Users Section */ -->
+        <section id="users" class="section active">
+            <h2 class="section-title">Manage Users</h2>
+            <button class="add-btn" onclick="addUser()">Add New User</button>
+            
+            <div class="user-cards" id="userCards">
+                <!-- User Cards will be dynamically generated -->
+            </div>
+        </section>
+
+        <!-- Orders Section -->
+        <section id="orders" class="section">
+            <h2 class="section-title">Manage Orders</h2>
+            <button class="add-btn" onclick="addOrder()">Create New Order</button>
+            
+            <div class="content-cards" id="orderCards">
+                <!-- Order Cards will be dynamically generated -->
+            </div>
+        </section>
+
+        <!-- Listings Section -->
+        <section id="listings" class="section">
+            <h2 class="section-title">Manage Listings</h2>
+            <button class="add-btn" onclick="addListing()">Add New Listing</button>
+            
+            <div class="content-cards" id="listingCards">
+                <!-- Listing Cards will be dynamically generated -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Sample data
+        let users = [
+            {id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin', status: 'online', initial: 'JD'},
+            {id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User', status: 'offline', initial: 'JS'},
+            {id: 3, name: 'Mike Johnson', email: 'mike@example.com', role: 'Moderator', status: 'online', initial: 'MJ'},
+            {id: 4, name: 'Sarah Wilson', email: 'sarah@example.com', role: 'User', status: 'online', initial: 'SW'}
+        ];
+
+        let orders = [
+            {id: 'ORD-001', date: '2024-01-15', amount: 299.99, status: 'completed', items: '3 items', customer: 'John Doe'},
+            {id: 'ORD-002', date: '2024-01-16', amount: 159.50, status: 'pending', items: '2 items', customer: 'Jane Smith'},
+            {id: 'ORD-003', date: '2024-01-17', amount: 89.99, status: 'cancelled', items: '1 item', customer: 'Mike Johnson'},
+            {id: 'ORD-004', date: '2024-01-18', amount: 449.00, status: 'completed', items: '5 items', customer: 'Sarah Wilson'}
+        ];
+
+        let listings = [
+            {id: 1, title: 'Wireless Headphones', price: 99.99, category: 'Electronics', views: 1250, likes: 89, icon: '🎧'},
+            {id: 2, title: 'Running Shoes', price: 79.99, category: 'Sports', views: 890, likes: 56, icon: '👟'},
+            {id: 3, title: 'Coffee Maker', price: 149.99, category: 'Home', views: 670, likes: 34, icon: '☕'},
+            {id: 4, title: 'Smartphone Case', price: 24.99, category: 'Accessories', views: 2100, likes: 145, icon: '📱'}
+        ];
+
+        // Navigation functions
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Add active class to selected tab
+            event.target.classList.add('active');
+            
+            // Render appropriate content
+            if (sectionName === 'users') renderUsers();
+            else if (sectionName === 'orders') renderOrders();
+            else if (sectionName === 'listings') renderListings();
+        }
+
+        // Render functions
+        function renderUsers() {
+            const container = document.getElementById('userCards');
+            container.innerHTML = users.map(user => `
+                <div class="user-card">
+                    <div class="avatar" data-initial="${user.initial}">
+                        <div class="user-status ${user.status}"></div>
+                    </div>
+                    <div class="user-details">
+                        <div class="user-name">${user.name}</div>
+                        <div class="user-email">${user.email}</div>
+                        <div class="user-role">${user.role}</div>
+                    </div>
+                    <div class="actions">
+                        <button class="action-btn primary" onclick="editUser(${user.id})">Action 1</button>
+                        <button class="action-btn danger" onclick="deleteUser(${user.id})">Action 2</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderOrders() {
+            const container = document.getElementById('orderCards');
+            container.innerHTML = orders.map(order => `
+                <div class="content-card">
+                    <div class="order-header">
+                        <div class="order-id">${order.id}</div>
+                        <div class="order-date">${order.date}</div>
+                    </div>
+                    <div class="order-amount">$${order.amount}</div>
+                    <div class="order-status ${order.status}">${order.status}</div>
+                    <div class="order-items">${order.items} • ${order.customer}</div>
+                    <div class="actions">
+                        <button class="action-btn primary" onclick="viewOrder('${order.id}')">View Details</button>
+                        <button class="action-btn secondary" onclick="editOrder('${order.id}')">Edit</button>
+                        ${order.status === 'pending' ? 
+                            `<button class="action-btn success" onclick="approveOrder('${order.id}')">Approve</button>` : 
+                            `<button class="action-btn danger" onclick="cancelOrder('${order.id}')">Cancel</button>`
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderListings() {
+            const container = document.getElementById('listingCards');
+            container.innerHTML = listings.map(listing => `
+                <div class="content-card">
+                    <div class="listing-image">${listing.icon}</div>
+                    <div class="listing-title">${listing.title}</div>
+                    <div class="listing-price">$${listing.price}</div>
+                    <div class="listing-category">${listing.category}</div>
+                    <div class="listing-stats">
+                        <div class="stat">
+                            <div class="stat-value">${listing.views}</div>
+                            <div class="stat-label">Views</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${listing.likes}</div>
+                            <div class="stat-label">Likes</div>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="action-btn primary" onclick="editListing(${listing.id})">Edit</button>
+                        <button class="action-btn secondary" onclick="viewListing(${listing.id})">View</button>
+                        <button class="action-btn danger" onclick="deleteListing(${listing.id})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Action functions
+        function addUser() {
+            const name = prompt('Enter user name:');
+            if (name) {
+                const email = prompt('Enter email:');
+                const role = prompt('Enter role (Admin/User/Moderator):') || 'User';
+                const newUser = {
+                    id: users.length + 1,
+                    name: name,
+                    email: email,
+                    role: role,
+                    status: 'online',
+                    initial: name.split(' ').map(n => n[0]).join('')
+                };
+                users.push(newUser);
+                renderUsers();
+            }
+        }
+
+        function editUser(id) {
+            const user = users.find(u => u.id === id);
+            if (user) {
+                user.name = prompt('Edit name:', user.name) || user.name;
+                user.email = prompt('Edit email:', user.email) || user.email;
+                user.role = prompt('Edit role:', user.role) || user.role;
+                renderUsers();
+            }
+        }
+
+        function viewUser(id) {
+            const user = users.find(u => u.id === id);
+            if (user) {
+                alert(`User Details:\nName: ${user.name}\nEmail: ${user.email}\nRole: ${user.role}\nStatus: ${user.status}`);
+            }
+        }
+
+        function deleteUser(id) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                users = users.filter(u => u.id !== id);
+                renderUsers();
+            }
+        }
+
+        function addOrder() {
+            const customer = prompt('Enter customer name:');
+            if (customer) {
+                const amount = parseFloat(prompt('Enter order amount:'));
+                const items = prompt('Enter number of items:') || '1';
+                const newOrder = {
+                    id: `ORD-${String(orders.length + 1).padStart(3, '0')}`,
+                    date: new Date().toISOString().split('T')[0],
+                    amount: amount,
+                    status: 'pending',
+                    items: `${items} items`,
+                    customer: customer
+                };
+                orders.push(newOrder);
+                renderOrders();
+            }
+        }
+
+        function viewOrder(id) {
+            const order = orders.find(o => o.id === id);
+            if (order) {
+                alert(`Order Details:\nID: ${order.id}\nCustomer: ${order.customer}\nAmount: $${order.amount}\nStatus: ${order.status}\nDate: ${order.date}`);
+            }
+        }
+
+        function editOrder(id) {
+            const order = orders.find(o => o.id === id);
+            if (order) {
+                order.amount = parseFloat(prompt('Edit amount:', order.amount)) || order.amount;
+                order.status = prompt('Edit status (pending/completed/cancelled):', order.status) || order.status;
+                renderOrders();
+            }
+        }
+
+        function approveOrder(id) {
+            const order = orders.find(o => o.id === id);
+            if (order) {
+                order.status = 'completed';
+                renderOrders();
+            }
+        }
+
+        function cancelOrder(id) {
+            if (confirm('Are you sure you want to cancel this order?')) {
+                const order = orders.find(o => o.id === id);
+                if (order) {
+                    order.status = 'cancelled';
+                    renderOrders();
+                }
+            }
+        }
+
+        function addListing() {
+            const title = prompt('Enter listing title:');
+            if (title) {
+                const price = parseFloat(prompt('Enter price:'));
+                const category = prompt('Enter category:') || 'General';
+                const icon = prompt('Enter icon (emoji):') || '📦';
+                const newListing = {
+                    id: listings.length + 1,
+                    title: title,
+                    price: price,
+                    category: category,
+                    views: 0,
+                    likes: 0,
+                    icon: icon
+                };
+                listings.push(newListing);
+                renderListings();
+            }
+        }
+
+        function editListing(id) {
+            const listing = listings.find(l => l.id === id);
+            if (listing) {
+                listing.title = prompt('Edit title:', listing.title) || listing.title;
+                listing.price = parseFloat(prompt('Edit price:', listing.price)) || listing.price;
+                listing.category = prompt('Edit category:', listing.category) || listing.category;
+                renderListings();
+            }
+        }
+
+        function viewListing(id) {
+            const listing = listings.find(l => l.id === id);
+            if (listing) {
+                alert(`Listing Details:\nTitle: ${listing.title}\nPrice: $${listing.price}\nCategory: ${listing.category}\nViews: ${listing.views}\nLikes: ${listing.likes}`);
+            }
+        }
+
+        function deleteListing(id) {
+            if (confirm('Are you sure you want to delete this listing?')) {
+                listings = listings.filter(l => l.id !== id);
+                renderListings();
+            }
+        }
+
+        function toggleSettings() {
+            alert('Settings menu would open here!');
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.content-card');
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Initialize
+        renderUsers();
+    </script>
+</body>
+</html>
