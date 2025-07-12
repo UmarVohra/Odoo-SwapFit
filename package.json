@@ -1,0 +1,12 @@
+{
+  "name": "odoo-swapfit",
+  "version": "1.0.0",
+  "description": "Odoo-Hackathon 3rd Problem Statement",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
