@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Section */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .screen-label {
+            background-color: #1e293b;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .control-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        /* Search Bar */
+        .search-container {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 50px 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            background-color: white;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .search-button {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-button:hover {
+            background-color: #2563eb;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        /* Left Column - Image Upload */
+        .image-section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-upload-area:hover {
+            border-color: #3b82f6;
+            background-color: #f8fafc;
+        }
+
+        .image-upload-area.has-image {
+            padding: 0;
+            border-style: solid;
+        }
+
+        .upload-placeholder {
+            color: #64748b;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .upload-hint {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* Right Column - Product Info */
+        .product-info {
+            background-color: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1e293b;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            background-color: white;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .rating-container {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .star {
+            font-size: 24px;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .star.active {
+            color: #fbbf24;
+        }
+
+        .star:hover {
+            color: #fbbf24;
+        }
+
+        .toggle-button {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .toggle-button:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+        }
+
+        .toggle-button.swapped {
+            background-color: #6b7280;
+        }
+
+        .toggle-button.swapped:hover {
+            background-color: #4b5563;
+        }
+
+        .submit-button {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .submit-button:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        /* Previous Listings Section */
+        .previous-listings {
+            margin-top: 50px;
+        }
+
+        .listings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            color: white;
+        }
+
+        .listings-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .listings-count {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .listings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .listing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            border: 1px solid #f1f5f9;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .listing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .listing-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .listing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .listing-image {
+            width: 100%;
+            height: 200px;
+            border-radius: 16px;
+            object-fit: cover;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .listing-card:hover .listing-image {
+            transform: scale(1.05);
+        }
+
+        .listing-image-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: #64748b;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .listing-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+
+        .listing-category {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .listing-description {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .listing-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+
+        .listing-rating .star {
+            font-size: 16px;
+        }
+
+        .listing-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .listing-status.available {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .listing-status.swapped {
+            background-color: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .page-title {
+                font-size: 20px;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .image-section,
+            .product-info {
+                padding: 20px;
+            }
+
+            .image-upload-area {
+                min-height: 200px;
+                padding: 30px 15px;
+            }
+
+            .listings-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 15px;
+            }
+
+            .listing-card {
+                padding: 15px;
+            }
+
+            .listing-image,
+            .listing-image-placeholder {
+                height: 150px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .listings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="screen-label">Screen 7</div>
+            <div class="page-title">Product Detail Page</div>
+            <div class="control-icon">○</div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search products...">
+            <button class="search-button">🔍</button>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Left Column - Image Upload -->
+            <div class="image-section">
+                <div class="image-upload-area" onclick="document.getElementById('imageInput').click()">
+                    <div class="upload-content">
+                        <div class="upload-placeholder">Add Images</div>
+                        <div class="upload-hint">Click to upload or drag and drop</div>
+                    </div>
+                </div>
+                <input type="file" id="imageInput" class="file-input" accept="image/*">
+            </div>
+
+            <!-- Right Column - Product Info -->
+            <div class="product-info">
+                <h2 class="section-title">Add Product Description</h2>
+                
+                <div class="form-group">
+                    <label class="form-label">Product Name</label>
+                    <input type="text" id="productName" class="form-input" placeholder="Enter product name">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select id="productCategory" class="form-select">
+                        <option value="">Select category</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Clothing">Clothing</option>
+                        <option value="Books">Books</option>
+                        <option value="Home & Garden">Home & Garden</option>
+                        <option value="Sports">Sports</option>
+                        <option value="Toys">Toys</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea id="productDescription" class="form-textarea" placeholder="Enter detailed product description..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Rating</label>
+                    <div class="rating-container">
+                        <span class="star" data-rating="1">★</span>
+                        <span class="star" data-rating="2">★</span>
+                        <span class="star" data-rating="3">★</span>
+                        <span class="star" data-rating="4">★</span>
+                        <span class="star" data-rating="5">★</span>
+                    </div>
+                </div>
+
+                <button class="toggle-button" id="statusToggle">Available</button>
+                <button class="submit-button" onclick="addProduct()">Add Product</button>
+            </div>
+        </div>
+
+        <!-- Previous Listings Section -->
+        <div class="previous-listings">
+            <h2 class="listings-title">Previous Listings:</h2>
+            <div class="listings-grid" id="listingsGrid">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📦</div>
+                    <div>No products listed yet. Add your first product above!</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let products = [];
+        let currentRating = 0;
+        let isAvailable = true;
+        let currentImage = null;
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            loadProducts();
+        });
+
+        function setupEventListeners() {
+            // Image upload
+            document.getElementById('imageInput').addEventListener('change', handleImageUpload);
+            
+            // Status toggle
+            document.getElementById('statusToggle').addEventListener('click', toggleStatus);
+            
+            // Rating stars
+            const stars = document.querySelectorAll('.star');
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    setRating(parseInt(this.dataset.rating));
+                });
+                
+                star.addEventListener('mouseenter', function() {
+                    highlightStars(parseInt(this.dataset.rating));
+                });
+            });
+            
+            // Reset star highlighting on mouse leave
+            document.querySelector('.rating-container').addEventListener('mouseleave', function() {
+                highlightStars(currentRating);
+            });
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImage = e.target.result;
+                    displayImagePreview(currentImage);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function displayImagePreview(imageSrc) {
+            const uploadArea = document.querySelector('.image-upload-area');
+            uploadArea.innerHTML = `<img src="${imageSrc}" alt="Product preview" class="preview-image">`;
+            uploadArea.classList.add('has-image');
+        }
+
+        function toggleStatus() {
+            const button = document.getElementById('statusToggle');
+            isAvailable = !isAvailable;
+            
+            if (isAvailable) {
+                button.textContent = 'Available';
+                button.classList.remove('swapped');
+            } else {
+                button.textContent = 'Swapped';
+                button.classList.add('swapped');
+            }
+        }
+
+        function setRating(rating) {
+            currentRating = rating;
+            highlightStars(rating);
+        }
+
+        function highlightStars(rating) {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function addProduct() {
+            const name = document.getElementById('productName').value.trim();
+            const category = document.getElementById('productCategory').value;
+            const description = document.getElementById('productDescription').value.trim();
+            
+            // Validation
+            if (!name) {
+                alert('Please enter a product name');
+                return;
+            }
+            
+            if (!category) {
+                alert('Please select a category');
+                return;
+            }
+            
+            if (description.length < 10) {
+                alert('Description must be at least 10 characters long');
+                return;
+            }
+            
+            if (currentRating === 0) {
+                alert('Please select a rating');
+                return;
+            }
+            
+            // Create product object
+            const product = {
+                id: Date.now(),
+                name: name,
+                category: category,
+                description: description,
+                rating: currentRating,
+                status: isAvailable ? 'available' : 'swapped',
+                image: currentImage,
+                dateAdded: new Date().toLocaleDateString()
+            };
+            
+            // Add to products array
+            products.unshift(product); // Add to beginning for newest first
+            
+            // Save to storage (using array instead of localStorage for compatibility)
+            saveProducts();
+            
+            // Reset form
+            resetForm();
+            
+            // Update display
+            displayProducts();
+            
+            // Show success message
+            alert('Product added successfully!');
+        }
+
+        function resetForm() {
+            document.getElementById('productName').value = '';
+            document.getElementById('productCategory').value = '';
+            document.getElementById('productDescription').value = '';
+            document.getElementById('imageInput').value = '';
+            
+            // Reset image upload area
+            const uploadArea = document.querySelector('.image-upload-area');
+            uploadArea.innerHTML = `
+                <div class="upload-content">
+                    <div class="upload-placeholder">Add Images</div>
+                    <div class="upload-hint">Click to upload or drag and drop</div>
+                </div>
+            `;
+            uploadArea.classList.remove('has-image');
+            
+            // Reset rating
+            currentRating = 0;
+            highlightStars(0);
+            
+            // Reset status
+            isAvailable = true;
+            const button = document.getElementById('statusToggle');
+            button.textContent = 'Available';
+            button.classList.remove('swapped');
+            
+            // Reset image
+            currentImage = null;
+        }
+
+        function displayProducts() {
+            const grid = document.getElementById('listingsGrid');
+            
+            if (products.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📦</div>
+                        <div>No products listed yet. Add your first product above!</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = products.map(product => `
+                <div class="listing-card">
+                    ${product.image ? 
+                        `<img src="${product.image}" alt="${product.name}" class="listing-image">` : 
+                        `<div class="listing-image-placeholder">No Image</div>`
+                    }
+                    <div class="listing-name">${product.name}</div>
+                    <div class="listing-category">${product.category}</div>
+                    <div class="listing-description">${product.description}</div>
+                    <div class="listing-rating">
+                        ${generateStarRating(product.rating)}
+                    </div>
+                    <span class="listing-status ${product.status}">${product.status === 'available' ? 'Available' : 'Swapped'}</span>
+                </div>
+            `).join('');
+        }
+
+        function generateStarRating(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                stars += `<span class="star ${i <= rating ? 'active' : ''}">★</span>`;
+            }
+            return stars;
+        }
+
+        function saveProducts() {
+            // In a real application, this would save to a database
+            // For this demo, we're just keeping it in memory
+            console.log('Products saved:', products);
+        }
+
+        function loadProducts() {
+            // Pre-populate with sample products
+            products = [
+                {
+                    id: 1,
+                    name: "Wireless Bluetooth Headphones",
+                    category: "Electronics",
+                    description: "High-quality wireless headphones with noise cancellation and 30-hour battery life. Perfect for music lovers and professionals.",
+                    rating: 5,
+                    status: "available",
+                    image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xMDAgNDBDMTIwIDQwIDEzNiA1NiAxMzYgNzZWMTI0QzEzNiAxNDQgMTIwIDE2MCAxMDAgMTYwQzgwIDE2MCA2NCAxNDQgNjQgMTI0Vjc2QzY0IDU2IDgwIDQwIDEwMCA0MCIgZmlsbD0iIzM3NDE1MSIvPgo8Y2lyY2xlIGN4PSI4MCIgY3k9IjEwMCIgcj0iMjQiIGZpbGw9IiM2QjdCODAiLz4KPGNpcmNsZSBjeD0iMTIwIiBjeT0iMTAwIiByPSIyNCIgZmlsbD0iIzZCN0I4MCIvPgo8L3N2Zz4K",
+                    dateAdded: "2024-01-15"
+                },
+                {
+                    id: 2,
+                    name: "Vintage Leather Jacket",
+                    category: "Clothing",
+                    description: "Classic brown leather jacket in excellent condition. Size Medium. Perfect for casual outings and motorcycle rides.",
+                    rating: 4,
+                    status: "available",
+                    image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik04MCA0MEgxMjBDMTQwIDQwIDE2MCA2MCA2MCA4MFYxNDBDMTYwIDE2MCA0MCA2MCA2MCA4MFY4MEg4MFoiIGZpbGw9IiM5MjQwMDAiLz4KPHBhdGggZD0iTTcwIDYwSDE0MFYxNDBINzBWNjBaIiBmaWxsPSIjQTk1MjFCIi8+CjxyZWN0IHg9IjkwIiB5PSI4MCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjNzkyNjA3Ii8+Cjwvc3ZnPgo=",
+                    dateAdded: "2024-01-10"
+                },
+                {
+                    id: 3,
+                    name: "JavaScript Programming Book",
+                    category: "Books",
+                    description: "Comprehensive guide to modern JavaScript programming. Includes ES6+ features, async programming, and best practices.",
+                    rating: 5,
+                    status: "swapped",
+                    image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxyZWN0IHg9IjUwIiB5PSI0MCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMjAiIGZpbGw9IiMzQjgyRjYiLz4KPHJlY3QgeD0iNTUiIHk9IjUwIiB3aWR0aD0iOTAiIGhlaWdodD0iMTAiIGZpbGw9IndoaXRlIi8+CjxyZWN0IHg9IjU1IiB5PSI3MCIgd2lkdGg9IjcwIiBoZWlnaHQ9IjUiIGZpbGw9IndoaXRlIi8+CjxyZWN0IHg9IjU1IiB5PSI4MCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjUiIGZpbGw9IndoaXRlIi8+CjxyZWN0IHg9IjU1IiB5PSI5MCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjUiIGZpbGw9IndoaXRlIi8+Cjx0ZXh0IHg9IjEwMCIgeT0iMTMwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiPkpTPC90ZXh0Pgo8L3N2Zz4K",
+                    dateAdded: "2024-01-05"
+                },
+                {
+                    id: 4,
+                    name: "Indoor Plant Collection",
+                    category: "Home & Garden",
+                    description: "Set of 3 beautiful indoor plants including snake plant, pothos, and peace lily. Perfect for home decoration and air purification.",
+                    rating: 4,
+                    status: "available",
+                    image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxyZWN0IHg9IjcwIiB5PSIxNDAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI0MCIgZmlsbD0iIzkyNDA0QSIvPgo8ZWxsaXBzZSBjeD0iMTAwIiBjeT0iMTAwIiByeD0iNDAiIHJ5PSI2MCIgZmlsbD0iIzE2QTM0QSIvPgo8ZWxsaXBzZSBjeD0iODAiIGN5PSI4MCIgcng9IjIwIiByeT0iNDAiIGZpbGw9IiMyMkM1NUUiLz4KPGVsbGlwc2UgY3g9IjEyMCIgY3k9IjkwIiByeD0iMTUiIHJ5PSIzNSIgZmlsbD0iIzIyQzU1RSIvPgo8L3N2Zz4K",
+                    dateAdded: "2024-01-12"
+                },
+                {
+                    id: 5,
+                    name: "Tennis Racquet Set",
+                    category: "Sports",
+                    description: "Professional tennis racquet with grip tape and carrying case. Great for beginners and intermediate players.",
+                    rating: 3,
+                    status: "available",
+                    image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxlbGxpcHNlIGN4PSIxMDAiIGN5PSI3MCIgcng9IjMwIiByeT0iNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzM3NDE1MSIgc3Ryb2tlLXdpZHRoPSI2Ii8+CjxsaW5lIHgxPSI4MCIgeTE9IjcwIiB4Mj0iMTIwIiB5Mj0iNzAiIHN0cm9rZT0iIzM3NDE1MSIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxsaW5lIHgxPSIxMDAiIHkxPSI0MCIgeDI9IjEwMCIgeTI9IjEwMCIgc3Ryb2tlPSIjMzc0MTUxIiBzdHJva2Utd2lkdGg9IjIiLz4KPHJlY3QgeD0iOTUiIHk9IjExMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjOTI0MDA0Ii8+Cjwvc3ZnPgo=",
+                    dateAdded: "2024-01-08"
+                },
+                {
+                    id: 6,
+                    name: "Board Game Collection",
+                    category: "Toys",
+                    description: "Set of 5 classic board games including Monopoly, Scrabble, and Chess. Perfect for family game nights.",
+                    rating: 4,
+                    status: "available",
+                    image: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxyZWN0IHg9IjUwIiB5PSI2MCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSI4MCIgZmlsbD0iI0RDMjYyNiIvPgo8cmVjdCB4PSI2MCIgeT0iNzAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI2MCIgZmlsbD0iI0ZGRkZGRiIvPgo8cmVjdCB4PSI3MCIgeT0iODAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iIzAwMDAwMCIvPgo8cmVjdCB4PSI5MCIgeT0iODAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iIzAwMDAwMCIvPgo8cmVjdCB4PSIxMTAiIHk9IjgwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9IiMwMDAwMDAiLz4KPHJlY3QgeD0iNzAiIHk9IjEwMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjMDAwMDAwIi8+CjxyZWN0IHg9IjkwIiB5PSIxMDAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iIzAwMDAwMCIvPgo8cmVjdCB4PSIxMTAiIHk9IjEwMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjMDAwMDAwIi8+Cjwvc3ZnPgo=",
+                    dateAdded: "2024-01-03"
+                }
+            ];
+            displayProducts();
+        }
+    </script>
+</body>
+</html>
