@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Detail Page</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./add_product.css">
-   
+    <link rel="stylesheet" href="./css/add_product.css">
+
 </head>
+
 <body>
     <div class="container">
         <!-- Header Section -->
@@ -39,7 +41,7 @@
             <!-- Right Column - Product Info -->
             <div class="product-info">
                 <h2 class="section-title">Add Product Description</h2>
-                
+
                 <div class="form-group">
                     <label class="form-label">Product Name</label>
                     <input type="text" id="productName" class="form-input" placeholder="Enter product name">
@@ -61,7 +63,8 @@
 
                 <div class="form-group">
                     <label class="form-label">Description</label>
-                    <textarea id="productDescription" class="form-textarea" placeholder="Enter detailed product description..."></textarea>
+                    <textarea id="productDescription" class="form-textarea"
+                        placeholder="Enter detailed product description..."></textarea>
                 </div>
 
                 <div class="form-group">
@@ -93,7 +96,7 @@
     </div>
 
     <script>
-          
+
         // Global variables
         let products = [];
         let currentRating = 0;
@@ -101,7 +104,7 @@
         let currentImage = null;
 
         // Initialize the page
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             setupEventListeners();
             loadProducts();
         });
@@ -109,24 +112,24 @@
         function setupEventListeners() {
             // Image upload
             document.getElementById('imageInput').addEventListener('change', handleImageUpload);
-            
+
             // Status toggle
             document.getElementById('statusToggle').addEventListener('click', toggleStatus);
-            
+
             // Rating stars
             const stars = document.querySelectorAll('.star');
             stars.forEach(star => {
-                star.addEventListener('click', function() {
+                star.addEventListener('click', function () {
                     setRating(parseInt(this.dataset.rating));
                 });
-                
-                star.addEventListener('mouseenter', function() {
+
+                star.addEventListener('mouseenter', function () {
                     highlightStars(parseInt(this.dataset.rating));
                 });
             });
-            
+
             // Reset star highlighting on mouse leave
-            document.querySelector('.rating-container').addEventListener('mouseleave', function() {
+            document.querySelector('.rating-container').addEventListener('mouseleave', function () {
                 highlightStars(currentRating);
             });
         }
@@ -135,7 +138,7 @@
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     currentImage = e.target.result;
                     displayImagePreview(currentImage);
                 };
@@ -152,7 +155,7 @@
         function toggleStatus() {
             const button = document.getElementById('statusToggle');
             isAvailable = !isAvailable;
-            
+
             if (isAvailable) {
                 button.textContent = 'Available';
                 button.classList.remove('swapped');
@@ -182,28 +185,28 @@
             const name = document.getElementById('productName').value.trim();
             const category = document.getElementById('productCategory').value;
             const description = document.getElementById('productDescription').value.trim();
-            
+
             // Validation
             if (!name) {
                 alert('Please enter a product name');
                 return;
             }
-            
+
             if (!category) {
                 alert('Please select a category');
                 return;
             }
-            
+
             if (description.length < 10) {
                 alert('Description must be at least 10 characters long');
                 return;
             }
-            
+
             if (currentRating === 0) {
                 alert('Please select a rating');
                 return;
             }
-            
+
             // Create product object
             const product = {
                 id: Date.now(),
@@ -215,19 +218,19 @@
                 image: currentImage,
                 dateAdded: new Date().toLocaleDateString()
             };
-            
+
             // Add to products array
             products.unshift(product); // Add to beginning for newest first
-            
+
             // Save to storage (using array instead of localStorage for compatibility)
             saveProducts();
-            
+
             // Reset form
             resetForm();
-            
+
             // Update display
             displayProducts();
-            
+
             // Show success message
             alert('Product added successfully!');
         }
@@ -237,7 +240,7 @@
             document.getElementById('productCategory').value = '';
             document.getElementById('productDescription').value = '';
             document.getElementById('imageInput').value = '';
-            
+
             // Reset image upload area
             const uploadArea = document.querySelector('.image-upload-area');
             uploadArea.innerHTML = `
@@ -247,24 +250,24 @@
                 </div>
             `;
             uploadArea.classList.remove('has-image');
-            
+
             // Reset rating
             currentRating = 0;
             highlightStars(0);
-            
+
             // Reset status
             isAvailable = true;
             const button = document.getElementById('statusToggle');
             button.textContent = 'Available';
             button.classList.remove('swapped');
-            
+
             // Reset image
             currentImage = null;
         }
 
         function displayProducts() {
             const grid = document.getElementById('listingsGrid');
-            
+
             if (products.length === 0) {
                 grid.innerHTML = `
                     <div class="empty-state">
@@ -274,13 +277,13 @@
                 `;
                 return;
             }
-            
+
             grid.innerHTML = products.map(product => `
                 <div class="listing-card">
-                    ${product.image ? 
-                        `<img src="${product.image}" alt="${product.name}" class="listing-image">` : 
-                        `<div class="listing-image-placeholder">No Image</div>`
-                    }
+                    ${product.image ?
+                    `<img src="${product.image}" alt="${product.name}" class="listing-image">` :
+                    `<div class="listing-image-placeholder">No Image</div>`
+                }
                     <div class="listing-name">${product.name}</div>
                     <div class="listing-category">${product.category}</div>
                     <div class="listing-description">${product.description}</div>
@@ -372,8 +375,9 @@
             ];
             displayProducts();
         }
-   
+
     </script>
-  <!-- <script src="add_product.js"></script> -->
+    <!-- <script src="add_product.js"></script> -->
 </body>
+
 </html>
