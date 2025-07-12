@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rewear Exchange | Premium Pre-Loved Fashion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Prata&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/home.css">
+</head>
+<body>
+    
+    <header id="mainHeader">
+        <div class="navbar">
+            <a href="#" class="logo">
+                <i class="fas fa-recycle"></i>
+                Rewear<span>Exchange</span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Shop</a></li>
+                <li><a href="#">Sell</a></li>
+                <li><a href="./about.html">About</a></li>
+                <li><a href="#">Sustainability</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            
+            <div class="nav-actions">
+                <i class="fas fa-search"></i>
+                <i class="fas fa-user"></i>
+                <i class="fas fa-heart"></i>
+                <div style="position: relative;">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count">3</span>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <video autoplay muted loop class="hero-video">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-woman-looking-through-racks-of-clothes-in-a-store-39885-large.mp4" type="video/mp4">
+        </video>
+        <div class="hero-content">
+            <h1>Curated Pre-Loved Luxury</h1>
+            <p>Discover exceptional quality second-hand fashion at a fraction of the price. Join our movement to reduce textile waste while looking impeccable.</p>
+            <div class="hero-buttons">
+                <a href="#" class="btn btn-primary">Shop Collection</a>
+                <a href="#" class="btn btn-outline">Become a Seller</a>
+            </div>
+        </div>
+    </section>
+    
+    <section class="stats">
+    <div class="stats-container">
+      <div class="stat-item">
+        <div class="stat-number"><%= stats.totalItems %></div>
+        <div class="stat-label">Designer Items Rescued</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number"><%= stats.totalSellers %></div>
+        <div class="stat-label">Trusted Sellers</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number"><%= stats.totalCategories %></div>
+        <div class="stat-label">Categories Curated</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number"><%= stats.co2Saved %></div>
+        <div class="stat-label">Pounds of CO2 Saved</div>
+      </div>
+    </div>
+  </section>
+    
+    <section class="section categories-section">
+    <div class="section-title">
+      <h2>Our Curated Collections</h2>
+      <p class="section-subtitle">Handpicked selections of premium pre-owned fashion items.</p>
+    </div>
+    <div class="categories-scroll">
+      <% categories.forEach(cat => { %>
+        <div class="category-card">
+          <div class="category-img" style="background-image: url('<%= cat.image %>');">
+            <div class="category-overlay">
+              <h3 class="category-name"><%= cat.name %></h3>
+              <p class="category-desc">Explore premium <%= cat.name %></p>
+              <a href="#" class="btn btn-primary">Explore</a>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </section>
+        
+        <div class="scroll-indicator">
+            <i class="fas fa-arrow-right"></i> Scroll to discover more collections
+        </div>
+    </section>
+    
+    <section class="section products-section">
+    <div class="section-title">
+      <h2>New Arrivals</h2>
+      <p class="section-subtitle">Freshly listed items from our community of luxury sellers</p>
+    </div>
+    <div class="products-container">
+      <% products.forEach(item => { %>
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="<%= item.image %>" alt="<%= item.item_name %>" class="product-img">
+            <span class="product-badge">Just In</span>
+            <div class="product-actions">
+              <button class="add-to-cart-btn">Add to Cart</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <h3 class="product-title"><%= item.item_name %></h3>
+            <p class="product-description"><%= item.item_description.substring(0, 80) %>...</p>
+            <div class="product-price-container">
+              <div>
+                <span class="product-price"><%= item.points %> pts</span>
+              </div>
+              <button class="wishlist-btn"><i class="far fa-heart"></i></button>
+            </div>
+            <div class="product-meta">
+              <span>Condition: <%= item.rating >= 4 ? 'Excellent' : 'Good' %></span>
+              <span>Listed On: <%= item.created_at.toDateString() %></span>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </section>
+
+    
+    <section class="section how-it-works">
+        <div class="section-title">
+            <h2>Our Authentication Process</h2>
+            <p class="section-subtitle">Every item goes through our rigorous 10-point verification before reaching you</p>
+        </div>
+        
+        <div class="steps-container">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h3 class="step-title">Expert Inspection</h3>
+                <p class="step-description">Our team of luxury authenticators examines every detail from stitching to hardware.</p>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h3 class="step-title">Material Analysis</h3>
+                <p class="step-description">We verify the composition and quality of all materials used in the item.</p>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h3 class="step-title">Serial Verification</h3>
+                <p class="step-description">All serial numbers and authenticity cards are cross-checked with manufacturer databases.</p>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <h3 class="step-title">Final Approval</h3>
+                <p class="step-description">Only items that pass all checks are approved for sale on our platform.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section testimonials">
+        <div class="section-title">
+            <h2>Trusted By Fashion Enthusiasts</h2>
+            <p class="section-subtitle">Join thousands of satisfied customers who've discovered luxury for less</p>
+        </div>
+        
+        <div class="testimonial-slider">
+            <div class="testimonial-slide active">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah Johnson" class="testimonial-avatar">
+                <p class="testimonial-text">I was skeptical about buying pre-owned luxury at first, but Rewear Exchange's authentication process gave me complete confidence. My Chanel bag arrived in perfect condition, just as described, at nearly half the retail price!</p>
+                <div class="testimonial-author">Sarah Johnson</div>
+                <div class="testimonial-role">Luxury Collector, New York</div>
+            </div>
+            
+            <div class="testimonial-slide">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael Chen" class="testimonial-avatar">
+                <p class="testimonial-text">As a frequent seller on Rewear Exchange, I'm consistently impressed with how quickly my items sell and how fair the commission rates are. The team's photography and listing service is exceptional.</p>
+                <div class="testimonial-author">Michael Chen</div>
+                <div class="testimonial-role">Premium Seller, Los Angeles</div>
+            </div>
+            
+            <div class="testimonial-slide">
+                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Emma Rodriguez" class="testimonial-avatar">
+                <p class="testimonial-text">The quality of items I've purchased has exceeded my expectations every time. Knowing I'm reducing fashion waste while building my dream wardrobe makes every purchase feel even better.</p>
+                <div class="testimonial-author">Emma Rodriguez</div>
+                <div class="testimonial-role">Sustainable Fashion Advocate, London</div>
+            </div>
+        </div>
+        
+        <div class="slider-controls">
+            <div class="slider-dot active"></div>
+            <div class="slider-dot"></div>
+            <div class="slider-dot"></div>
+        </div>
+    </section>
+    
+    <section class="newsletter">
+        <div class="section-title">
+            <h2>Join Our Exclusive Community</h2>
+            <p class="section-subtitle">Get early access to new arrivals, private sales, and sustainability insights</p>
+        </div>
+        
+        <form class="newsletter-form">
+            <input type="email" class="newsletter-input" placeholder="Enter your email address" required>
+            <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+    </section>
+    
+    <footer>
+        <div class="footer-container">
+            <div class="footer-about">
+                <a href="#" class="footer-logo">
+                    <i class="fas fa-recycle"></i> Rewear<span>Exchange</span>
+                </a>
+                <p>We're revolutionizing luxury fashion by creating a sustainable marketplace for pre-owned designer items. Our mission is to make high-end fashion accessible while reducing environmental impact.</p>
+                
+                <div class="footer-contact">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+1 (888) 123-4567</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>hello@rewearexchange.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>123 Fashion Ave, New York, NY</span>
+                    </div>
+                </div>
+                
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-links">
+                <h3>Shop</h3>
+                <ul>
+                    <li><a href="#">New Arrivals</a></li>
+                    <li><a href="#">Luxury Handbags</a></li>
+                    <li><a href="#">Designer Watches</a></li>
+                    <li><a href="#">Men's Suiting</a></li>
+                    <li><a href="#">Women's Couture</a></li>
+                    <li><a href="#">Limited Sneakers</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links">
+                <h3>Sell With Us</h3>
+                <ul>
+                    <li><a href="#">How It Works</a></li>
+                    <li><a href="#">Seller Benefits</a></li>
+                    <li><a href="#">Authentication Process</a></li>
+                    <li><a href="#">Shipping Guidelines</a></li>
+                    <li><a href="#">Seller Dashboard</a></li>
+                    <li><a href="#">Commission Rates</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links">
+                <h3>Company</h3>
+                <ul>
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">Sustainability</a></li>
+                    <li><a href="#">Authenticators</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 Rewear Exchange. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="#">Sustainability Report</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('mainHeader');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Testimonial slider
+        const slides = document.querySelectorAll('.testimonial-slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        let currentSlide = 0;
+        
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+        
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                showSlide(index);
+            });
+        });
+        
+        // Auto-rotate testimonials
+        setInterval(() => {
+            showSlide(currentSlide + 1);
+        }, 5000);
+    </script>
+</body>
+</html>
